@@ -1,21 +1,11 @@
-//
-//  ContentView.swift
-//  Weather
-//
-//  Created by Atalanta GRAINCA on 28/01/2024.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    @State private var searchText = ""
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Weathers!")
+            MenuView()
         }
-        .padding()
     }
 }
 

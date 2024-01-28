@@ -1,16 +1,40 @@
-//
-//  MenuView.swift
-//  Weather
-//
-//  Created by Atalanta GRAINCA on 28/01/2024.
-//
-
 import SwiftUI
 
 struct MenuView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            VStack (alignment: .leading) {
+                Text("Weather")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundStyle(Color.white)
+
+                TextField("Search for city", text: .constant(""))
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding([.top, .leading, .trailing], 10)
+
+            }.padding()
+            
+            
+            VStack {
+                List {
+                    Text("Mulhouse")
+                    Text("Mulhouse")
+                }
+                .padding(0)
+                .scrollContentBackground(.hidden)
+            }
+            Spacer()
+            
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(hue: 0.550, saturation: 0.787, brightness: 0.354))
+        .preferredColorScheme(.dark)
+
+        
+
     }
+    
 }
 
 #Preview {
