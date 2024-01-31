@@ -55,13 +55,14 @@ struct WeatherView: View {
                     
                     if let hourlyWeather = viewModel.selectedWeatherData?.hourly {
                         ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 20) {
+                            HStack(spacing: 10) {
                                 ForEach(Array(zip(hourlyWeather.time.indices, zip(hourlyWeather.temperature_2m, hourlyWeather.weather_code))).prefix(20), id: \.0) { index, data in
                                     let (temperature, weatherCode) = data
                                     HourlyWeatherView(dateTimeString: hourlyWeather.time[index], weatherCode: weatherCode, temperature: temperature)
                                 }
                             }
-                            .padding(.horizontal)
+                            .padding(.horizontal, 5.0)
+                            
                         }
                         .frame(height: 120)
                         .padding(3)
