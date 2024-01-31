@@ -5,95 +5,117 @@ struct WeatherView: View {
     let city: City
     
     var body: some View {
-        ZStack (alignment: .leading) {
-            VStack {
+        ScrollView {
+            if viewModel.selectedWeatherData == nil {
+                VStack {
+                    Text("Loading...")
+                        .font(.title2)
+                        .padding()
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+
+            } else {
                 VStack (alignment: .center, spacing: 5) {
                     Text(city.name)
                         .font(.title)
                         .fontWeight(.bold)
                     if let currentWeather = viewModel.selectedWeatherData?.currentWeather {
-                        Text("\(currentWeather.temperature, specifier: "%.1f")°") // Température actuelle
+                        Text("\(currentWeather.temperature, specifier: "%.1f")°")
                             .font(.system(size: 100))
                             .fontWeight(.bold)
                         Text("\(viewModel.descriptionForWeatherCode(currentWeather.weathercode))")
                             .font(.title2)
-                    } else {
-                        Text("Loading...") // Afficher pendant le chargement des données
-                            .font(.title2)
+                        if let dailyWeather = viewModel.selectedWeatherData?.daily,
+                           let tempMin = dailyWeather.temperature_2m_min.first,
+                           let tempMax = dailyWeather.temperature_2m_max.first {
+                            HStack(spacing: 10) {
+                                Text("H:\(tempMax, specifier: "%.1f")°")
+                                    .font(.headline)
+                                Text("L:\(tempMin, specifier: "%.1f")°")
+                                    .font(.headline)
+                            }
+                        }
                     }
                     
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding()
                 
-
                 
                 VStack {
-                    List {
-                        Section {
-                            if let dailyWeather = viewModel.selectedWeatherData?.daily,
-                               let tempMin = dailyWeather.temperature_2m_min.first,
-                               let tempMax = dailyWeather.temperature_2m_max.first {
-                                let formattedMinTemp = String(format: "%.1f°", tempMin)
-                                let formattedMaxTemp = String(format: "%.1f°", tempMax)
-
-                                VStack(alignment: .leading, spacing: 20) {
-                                    HStack {
-                                        RangeDegreeRow(logo: "thermometer", name: "Min temp", value: formattedMinTemp)
-                                        Spacer()
-                                        RangeDegreeRow(logo: "thermometer", name: "Max temp", value: formattedMaxTemp)
-                                    }
+                    HStack {
+                        Image(systemName: "clock")
+                            .foregroundColor(.white)
+                        Text("HOURLY FORECAST")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                        Spacer()
+                    }
+                    .padding(.top, 8)
+                    
+                    if let hourlyWeather = viewModel.selectedWeatherData?.hourly {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 10) {
+                                ForEach(Array(zip(hourlyWeather.time.indices, zip(hourlyWeather.temperature_2m, hourlyWeather.weather_code))).prefix(20), id: \.0) { index, data in
+                                    let (temperature, weatherCode) = data
+                                    HourlyWeatherView(dateTimeString: hourlyWeather.time[index], weatherCode: weatherCode, temperature: temperature)
                                 }
-                            } else {
-                                Text("Loading weather data...")
                             }
-                        }.listRowBackground(Color(hue: 0.375, saturation: 0.5, brightness: 0.7))
-                        
-                        Section {
-                            if let dailyWeather = viewModel.selectedWeatherData?.daily {
-                                ForEach(Array(zip(dailyWeather.time.indices, zip(dailyWeather.temperature_2m_min, dailyWeather.temperature_2m_max))), id: \.0) { index, temps in
-                                    let (minTemp, maxTemp) = temps
-                                    HStack {
-                                        Text(dayOfWeek(from: dailyWeather.time[index]))
-                                        Spacer()
-                                        Text("\(minTemp, specifier: "%.1f")° - \(maxTemp, specifier: "%.1f")°")
-                                    }
+                            .padding(.horizontal, 5.0)
+                            
+                        }
+                        .frame(height: 120)
+                        .padding(3)
+                        .background(Color.white.opacity(0.1))
+                        .cornerRadius(10)
+                    }
+                }
+                .padding(3)
+                .padding(.horizontal)
+                
+                VStack {
+                    HStack {
+                        Image(systemName: "calendar")
+                            .foregroundColor(.white)
+                        Text("7-DAY FORECAST")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 8)
+                    
+                    if let dailyWeather = viewModel.selectedWeatherData?.daily {
+                        VStack {
+                            ForEach(Array(zip(dailyWeather.time.indices, zip(dailyWeather.temperature_2m_min, dailyWeather.temperature_2m_max))), id: \.0) { index, temps in
+                                let (minTemp, maxTemp) = temps
+                                DailyForecastView(dateString: dailyWeather.time[index], minTemp: minTemp, maxTemp: maxTemp)
+                                
+                                if index != dailyWeather.time.count - 1 {
+                                    Divider().background(Color.white)
                                 }
-                            } else {
-                                Text("Loading weather data...")
                             }
                         }
+                        .padding()
+                        .background(Color.white.opacity(0.1))
+                        .cornerRadius(10)
+                        .shadow(radius: 2)
+                        .padding(.horizontal)
                     }
-                    .scrollContentBackground(.hidden)
                 }
-                .edgesIgnoringSafeArea(.bottom)
-                .background(Color(hue: 0.550, saturation: 0.787, brightness: 0.354))
-                .preferredColorScheme(.dark)
-                .onAppear { viewModel.fetchWeatherData(for: city) }
-
-
-
                 
                 Spacer()
-                
             }
-            .padding()
-            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .center)
             
         }
+        .padding(3)
+        .frame(maxWidth: .infinity, alignment: .center)
         .edgesIgnoringSafeArea(.bottom)
         .background(Color(hue: 0.550, saturation: 0.787, brightness: 0.354))
         .preferredColorScheme(.dark)
         .onAppear { viewModel.fetchWeatherData(for: city) }
-    }
-    
-    func dayOfWeek(from dateString: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        guard let date = dateFormatter.date(from: dateString) else { return "" }
-        
-        dateFormatter.dateFormat = "E"
-        return dateFormatter.string(from: date)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitle("", displayMode: .inline)
     }
 
 }
@@ -103,4 +125,3 @@ struct WeatherView: View {
     WeatherView(viewModel: CityViewModel(), city: City(id: 1, name: "Sample City", latitude: 0.0, longitude: 0.0))
                .preferredColorScheme(.dark)
 }
-
