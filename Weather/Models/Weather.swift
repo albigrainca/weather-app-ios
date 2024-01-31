@@ -8,10 +8,16 @@ struct CurrentWeather: Codable {
     let weathercode: Int
 }
 
+struct HourlyWeather: Codable {
+    var time: [String]
+    var temperature_2m: [Double]
+    var weather_code: [Int]
+}
+
 struct DailyWeather: Codable {
     let time: [String]
-    let temperature_2m_max: [Double]
-    let temperature_2m_min: [Double]
+    var temperature_2m_max: [Double]
+    var temperature_2m_min: [Double]
 }
 
 
@@ -19,12 +25,20 @@ struct WeatherData: Codable {
     let latitude: Double
     let longitude: Double
     let currentWeather: CurrentWeather
-    let daily: DailyWeather
+    var hourly: HourlyWeather
+    var daily: DailyWeather
     
     enum CodingKeys: String, CodingKey {
         case latitude, longitude
         case currentWeather = "current_weather"
         case daily
+        case hourly
+    }
+    
+    enum HourlyCodingKeys: String, CodingKey {
+        case time
+        case temperature_2m
+        case weather_code
     }
     
     enum DailyCodingKeys: String, CodingKey {

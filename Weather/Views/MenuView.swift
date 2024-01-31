@@ -7,11 +7,6 @@ struct MenuView: View {
     var body: some View {
         VStack {
             VStack (alignment: .leading) {
-                Text("Weather")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .foregroundStyle(Color.white)
-
                 TextField("Search for city", text: $cityName, onCommit: {
                     viewModel.searchCity(cityName: cityName)
                 })
@@ -42,6 +37,7 @@ struct MenuView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(hue: 0.550, saturation: 0.787, brightness: 0.354))
         .preferredColorScheme(.dark)
+        .navigationTitle("Search City")
 
         
 
