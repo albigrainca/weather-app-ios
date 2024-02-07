@@ -27,6 +27,10 @@ class CityViewModel: ObservableObject {
         }
     }
     
+    func deleteCity(at offsets: IndexSet) {
+        savedCities.remove(atOffsets: offsets)
+    }
+    
     func fetchWeatherData(for city: City) {
         Task {
             do {

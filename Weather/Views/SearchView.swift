@@ -45,7 +45,7 @@ struct SearchView: View {
                             .padding(.horizontal)
                         }
                     }
-                    .padding(.top)
+                    .padding(.top, 2)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
