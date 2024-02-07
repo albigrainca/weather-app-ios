@@ -1,3 +1,8 @@
+//  Weather.swift
+//
+//  Created by Albi GRAINCA and Batuhan GOKER
+//
+
 import Foundation
 
 struct CurrentWeather: Codable {

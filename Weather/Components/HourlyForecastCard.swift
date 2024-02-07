@@ -1,3 +1,8 @@
+//  HourlyForecastCard.swift
+//
+//  Created by Albi GRAINCA and Batuhan GOKER
+//
+
 import SwiftUI
 
 struct HourlyForecastCard: View {

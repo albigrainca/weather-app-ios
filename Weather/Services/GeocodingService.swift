@@ -1,3 +1,8 @@
+//  GeocodingService.swift
+//
+//  Created by Albi GRAINCA and Batuhan GOKER
+//
+
 import Foundation
 
 class GeocodingService {

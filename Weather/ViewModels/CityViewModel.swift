@@ -1,3 +1,8 @@
+//  CityViewModel.swift
+//
+//  Created by Albi GRAINCA and Batuhan GOKER
+//
+
 import SwiftUI
 
 class CityViewModel: ObservableObject {

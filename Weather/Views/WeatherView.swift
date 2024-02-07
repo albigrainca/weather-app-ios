@@ -1,3 +1,8 @@
+//  WeatherView.swift
+//
+//  Created by Albi GRAINCA and Batuhan GOKER
+//
+
 import SwiftUI
 
 struct WeatherView: View {
