@@ -63,37 +63,41 @@ class CityViewModel: ObservableObject {
         return modifiedWeatherData
     }
 
-
-    func descriptionForWeatherCode(_ code: Int) -> String {
+    
+    func decriptWeatherCode(_ code: Int) -> (description: String, iconName: String, pColor: Color, sColor: Color?) {
         switch code {
         case 0:
-            return "Clear Sky"
+            return ("Clear Sky", "sun.max.fill", .yellow, nil)
         case 1...3:
-            return "Partly Cloudy"
+            return ("Partly Cloudy", "cloud.sun.fill", .white, .yellow)
         case 4...48:
-            return "Fog"
+            return ("Fog", "cloud.fog.fill", .white, .gray)
         case 49...55:
-            return "Drizzle"
+            return ("Drizzle", "cloud.drizzle.fill", .white, .blue)
         case 56...57:
-            return "Freezing Drizzle"
-        case 58...65:
-            return "Rain"
+            return ("Freezing Drizzle", "cloud.sleet.fill", .white, .blue)
+        case 58...60:
+            return ("Rain", "cloud.heavyrain.fill", .white, .blue)
+        case 61...65:
+            return ("Rain", "cloud.rain.fill", .white, .blue)
         case 66...67:
-            return "Freezing Rain"
-        case 68...77:
-            return "Snow"
+            return ("Freezing Rain", "cloud.sleet.fill", .white, .blue)
+        case 68...75:
+            return ("Snow", "snow", .white, nil)
+        case 76...77:
+            return ("Snow", "wind.snow", .gray, .white)
         case 78...79:
-            return "Rain and Snow"
+            return ("Rain and Snow", "cloud.sleet.fill", .blue, .white)
         case 80...84:
-            return "Rain Showers"
+            return ("Rain Showers", "cloud.rain.fill", .white, .blue)
         case 85...86:
-            return "Snow Showers"
+            return ("Snow Showers", "cloud.snow.fill", .white, .white)
         case 87...94:
-            return "Extreme Weather"
+            return ("Extreme Weather", "tornado", .gray, nil)
         case 95...99:
-            return "Thunderstorm"
+            return ("Thunderstorm", "cloud.bolt.rain.fill", .white, .blue)
         default:
-            return "Unknown"
+            return ("Unknown", "questionmark.diamond.fill", .black, .white)
         }
     }
 

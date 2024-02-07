@@ -6,7 +6,6 @@ struct CitiesView: View {
     var body: some View {
         NavigationView {
             VStack {
-                
                 ScrollView(.vertical) {
                     VStack(spacing: 10) {
                         ForEach(viewModel.savedCities) { city in
@@ -37,13 +36,12 @@ struct CitiesView: View {
             .preferredColorScheme(.dark)
             .navigationTitle("Cities List")
             .navigationBarItems(trailing:
-                                    NavigationLink(destination: SearchView(viewModel: viewModel)) {
-                Image(systemName: "plus.circle.fill")
-                    .resizable()
-                    .frame(width: 30, height: 30)
-            }
+                NavigationLink(destination: SearchView(viewModel: viewModel)) {
+                    Image(systemName: "plus.circle.fill")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                }
             )
-            
         }
     }
 }
@@ -58,7 +56,6 @@ class MockCity: CityViewModel {
         ]
     }
 }
-
 
 #Preview {
     CitiesView(viewModel: MockCity())
