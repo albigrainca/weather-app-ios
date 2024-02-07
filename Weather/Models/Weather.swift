@@ -18,6 +18,7 @@ struct DailyWeather: Codable {
     let time: [String]
     var temperature_2m_max: [Double]
     var temperature_2m_min: [Double]
+    var weather_code: [Int]
 }
 
 
@@ -45,6 +46,7 @@ struct WeatherData: Codable {
         case time
         case temperatureMax = "temperature_2m_max"
         case temperatureMin = "temperature_2m_min"
+        case weather_code
     }
 }
 

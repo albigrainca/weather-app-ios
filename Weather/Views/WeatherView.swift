@@ -89,9 +89,10 @@ struct WeatherView: View {
                     
                     if let dailyWeather = viewModel.selectedWeatherData?.daily {
                         VStack {
-                            ForEach(Array(zip(dailyWeather.time.indices, zip(dailyWeather.temperature_2m_min, dailyWeather.temperature_2m_max))), id: \.0) { index, temps in
-                                let (minTemp, maxTemp) = temps
-                                DailyForecastView(dateString: dailyWeather.time[index], minTemp: minTemp, maxTemp: maxTemp)
+                            ForEach(Array(zip(dailyWeather.time.indices, zip(zip(dailyWeather.temperature_2m_min, dailyWeather.temperature_2m_max), dailyWeather.weather_code))), id: \.0) { index, data in
+                                let ((minTemp, maxTemp), weatherCode) = data
+                                let decript = viewModel.decriptWeatherCode(weatherCode)
+                                DailyForecastView(decript: decript, dateString: dailyWeather.time[index], minTemp: minTemp, maxTemp: maxTemp)
                                 
                                 if index != dailyWeather.time.count - 1 {
                                     Divider().background(Color.white)
