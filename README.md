@@ -44,7 +44,7 @@ L'application est structurée en plusieurs packages que nous détaillons ci-dess
 **Models** : Définit les modèles de données comme `City` et `WeatherData` qui représentent les structures des données manipulées par l'application.
 
 #### Package Components
-**Components** : Regroupe les composants réutilisables de l'interface utilisateur, par exemple `DailyForecastView` et `HourlyWeatherView`, qui aident à construire les écrans de l'application de manière modulaire.
+**Components** : Regroupe les composants réutilisables de l'interface utilisateur, par exemple `DailyForecastItem` et `HourlyWeatherCard`, qui aident à construire les écrans de l'application de manière modulaire.
 
 ### Fonctionnement
 
