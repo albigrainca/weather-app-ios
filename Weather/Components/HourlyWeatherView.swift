@@ -7,13 +7,15 @@ struct HourlyWeatherView: View {
     
     var body: some View {
         VStack {
-            Text(formatHour(from: dateTimeString)) // Affiche seulement l'heure
+            Text(dateTimeString)
                 .font(.caption)
-            Image(systemName: iconNameForWeatherCode(weatherCode)) // Utilise l'icône correspondante
+            let (iconName, pColor, sColor) = getIcon(weatherCode)
+            Image(systemName: iconName)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 30, height: 30)
-            Text("\(temperature, specifier: "%.1f")°") // La température
+                .foregroundStyle(pColor, sColor ?? .clear)
+            Text("\(temperature, specifier: "%.1f")°")
                 .font(.caption)
         }
         .frame(width: 80, height: 100)
@@ -21,28 +23,41 @@ struct HourlyWeatherView: View {
         .cornerRadius(10)
     }
     
-    func formatHour(from dateTimeString: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm" // Format d'entrée
-        guard let date = dateFormatter.date(from: dateTimeString) else { return "" }
-        
-        dateFormatter.dateFormat = "HH" // Format de sortie (heure uniquement)
-        return dateFormatter.string(from: date)
-    }
-    
-    func iconNameForWeatherCode(_ code: Int) -> String {
+    func getIcon(_ code: Int) -> (iconName: String, pColor: Color, sColor: Color?) {
         switch code {
-            case 0: return "sun.max" // Clear Sky
-            case 1: return "cloud.sun" // Partly cloudy
-            case 2: return "cloud.snow" // Blowing snow
-            case 3: return "tornado" // Sandstorm
-            case 4: return "cloud.fog" // Fog
-            case 5: return "cloud.drizzle" // Drizzle
-            case 6: return "cloud.rain" // Rain
-            case 7: return "snow" // Snow
-            case 8: return "cloud.heavyrain" // Shower
-            case 9: return "cloud.bolt.rain" // Thunderstorm
-            default: return "questionmark.diamond" // Unknown
+        case 0:
+            return ("sun.max.fill", .yellow, nil)
+        case 1...3:
+            return ("cloud.sun.fill", .white, .yellow)
+        case 4...48:
+            return ("cloud.fog.fill", .white, .gray)
+        case 49...55:
+            return ("cloud.drizzle.fill", .white, .blue)
+        case 56...57:
+            return ("cloud.sleet.fill", .white, .blue)
+        case 58...60:
+            return ("cloud.heavyrain.fill", .white, .blue)
+        case 61...65:
+            return ("cloud.rain.fill", .white, .blue)
+        case 66...67:
+            return ("cloud.sleet.fill", .white, .blue)
+        case 68...75:
+            return ("snow", .white, nil)
+        case 76...77:
+            return ("wind.snow", .gray, .white)
+        case 78...79:
+            return ("cloud.sleet.fill", .blue, .white)
+        case 80...84:
+            return ("cloud.rain.fill", .white, .blue)
+        case 85...86:
+            return ("cloud.snow.fill", .white, .white)
+        case 87...94:
+            return ("tornado", .gray, nil)
+        case 95...99:
+            return ("cloud.bolt.rain.fill", .white, .blue)
+        default:
+            return ("questionmark.diamond.fill", .black, .white)
         }
     }
+
 }

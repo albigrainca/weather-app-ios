@@ -18,37 +18,35 @@ struct SearchView: View {
             .foregroundColor(.white)
             .cornerRadius(5)
             .padding()
-
-            
-            
             
             ScrollView(.vertical) {
-                VStack(spacing: 20) {
-                    ForEach(viewModel.cities) { city in
-                        HStack {
-                            Text(city.name)
-                                .foregroundColor(Color.white)
-                                .padding()
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                if !viewModel.cities.isEmpty {
+                    VStack(spacing: 20) {
+                        ForEach(viewModel.cities) { city in
+                            HStack {
+                                Text(city.name)
+                                    .foregroundColor(Color.white)
+                                    .padding()
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                                 
-
-                            Button(action: {
-                                viewModel.addCity(city: city)
-                                presentationMode.wrappedValue.dismiss() // Ferme la vue actuelle
-
-                            }) {
-                                Image(systemName: "plus.circle.fill")
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
+                                Button(action: {
+                                    viewModel.addCity(city: city)
+                                    presentationMode.wrappedValue.dismiss()
+                                    
+                                }) {
+                                    Image(systemName: "plus.circle.fill")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                }
+                                .padding()
                             }
-                            .padding()
+                            .background(Color.white.opacity(0.1))
+                            .cornerRadius(10)
+                            .padding(.horizontal)
                         }
-                        .background(Color.white.opacity(0.1))
-                        .cornerRadius(10)
-                        .padding(.horizontal)
                     }
+                    .padding(.top)
                 }
-                .padding(.top)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }

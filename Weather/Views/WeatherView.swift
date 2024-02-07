@@ -111,7 +111,7 @@ struct WeatherView: View {
         .padding(3)
         .frame(maxWidth: .infinity, alignment: .center)
         .edgesIgnoringSafeArea(.bottom)
-        .background(Color(hue: 0.550, saturation: 0.787, brightness: 0.354))
+        .background(LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.5), Color.white.opacity(0.2)]), startPoint: .top, endPoint: .bottom))
         .preferredColorScheme(.dark)
         .onAppear { viewModel.fetchWeatherData(for: city) }
         .navigationBarTitleDisplayMode(.inline)
@@ -122,6 +122,6 @@ struct WeatherView: View {
 
 
 #Preview {
-    WeatherView(viewModel: CityViewModel(), city: City(id: 1, name: "Sample City", latitude: 0.0, longitude: 0.0))
+    WeatherView(viewModel: CityViewModel(), city: City(id: 1, name: "Sample City", latitude: 5.0, longitude: 0.0))
                .preferredColorScheme(.dark)
 }
