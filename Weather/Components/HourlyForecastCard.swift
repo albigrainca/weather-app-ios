@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct HourlyWeatherView: View {
+struct HourlyForecastCard: View {
     var decript: (description: String, iconName: String, pColor: Color, sColor: Color?)
     var dateTimeString: String
     var temperature: Double

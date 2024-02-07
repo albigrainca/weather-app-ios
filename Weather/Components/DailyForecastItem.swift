@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct DailyForecastView: View {
+struct DailyForecastItem: View {
     var decript: (description: String, iconName: String, pColor: Color, sColor: Color?)
     var dateString: String
     var minTemp: Double

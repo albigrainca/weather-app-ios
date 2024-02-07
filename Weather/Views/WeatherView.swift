@@ -60,7 +60,7 @@ struct WeatherView: View {
                                 ForEach(Array(zip(hourlyWeather.time.indices, zip(hourlyWeather.temperature_2m, hourlyWeather.weather_code))).prefix(20), id: \.0) { index, data in
                                     let (temperature, weatherCode) = data
                                     let decript = viewModel.decriptWeatherCode(weatherCode)
-                                    HourlyWeatherView(decript: decript, dateTimeString: hourlyWeather.time[index], temperature: temperature)
+                                    HourlyForecastCard(decript: decript, dateTimeString: hourlyWeather.time[index], temperature: temperature)
                                 }
                             }
                             .padding(.horizontal, 10.0)
@@ -92,7 +92,7 @@ struct WeatherView: View {
                             ForEach(Array(zip(dailyWeather.time.indices, zip(zip(dailyWeather.temperature_2m_min, dailyWeather.temperature_2m_max), dailyWeather.weather_code))), id: \.0) { index, data in
                                 let ((minTemp, maxTemp), weatherCode) = data
                                 let decript = viewModel.decriptWeatherCode(weatherCode)
-                                DailyForecastView(decript: decript, dateString: dailyWeather.time[index], minTemp: minTemp, maxTemp: maxTemp)
+                                DailyForecastItem(decript: decript, dateString: dailyWeather.time[index], minTemp: minTemp, maxTemp: maxTemp)
                                 
                                 if index != dailyWeather.time.count - 1 {
                                     Divider().background(Color.white)
