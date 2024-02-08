@@ -1,3 +1,8 @@
+//  CitiesView.swift
+//
+//  Created by Albi GRAINCA and Batuhan GOKER
+//
+
 import SwiftUI
 
 struct CitiesView: View {
@@ -7,29 +12,22 @@ struct CitiesView: View {
         NavigationView {
             VStack {
                 
-                ScrollView(.vertical) {
-                    VStack(spacing: 10) {
-                        ForEach(viewModel.savedCities) { city in
-                            NavigationLink(destination: WeatherView(viewModel: viewModel, city: city)) {
-                                HStack {
-                                    VStack(alignment: .leading) {
-                                        Text(city.name)
-                                            .fontWeight(.semibold)
-                                            .foregroundColor(.white)
-                                    }
-                                    Spacer()
-                                }
-                                .padding()
-                                .background(Color.white.opacity(0.1))
-                                .cornerRadius(10)
-                                .shadow(radius: 5)
+                List {
+                    ForEach(viewModel.savedCities) { city in
+                        NavigationLink(destination: WeatherView(viewModel: viewModel, city: city)) {
+                            VStack(alignment: .leading) {
+                                Text(city.name)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.white)
                             }
-                            .padding(.horizontal)
+                            .frame(height: 50)
                         }
+                        .listRowBackground(Color.white.opacity(0.1))
                     }
-                    .padding(.top)
+                    .onDelete(perform: viewModel.deleteCity)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding(.top, 1)
+                .scrollContentBackground(.hidden)
                 
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -37,13 +35,12 @@ struct CitiesView: View {
             .preferredColorScheme(.dark)
             .navigationTitle("Cities List")
             .navigationBarItems(trailing:
-                                    NavigationLink(destination: SearchView(viewModel: viewModel)) {
-                Image(systemName: "plus.circle.fill")
-                    .resizable()
-                    .frame(width: 30, height: 30)
-            }
+                NavigationLink(destination: SearchView(viewModel: viewModel)) {
+                    Image(systemName: "plus.circle.fill")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                }
             )
-            
         }
     }
 }

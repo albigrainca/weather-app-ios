@@ -1,3 +1,8 @@
+//  CityViewModel.swift
+//
+//  Created by Albi GRAINCA and Batuhan GOKER
+//
+
 import SwiftUI
 
 class CityViewModel: ObservableObject {
@@ -9,14 +14,14 @@ class CityViewModel: ObservableObject {
     private var weatherService = WeatherService()
     
     func searchCity(cityName: String) {
-        geocodingService.fetchCoordinates(cityName: cityName) { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let cities):
-                    self?.cities = cities
-                case .failure(let error):
-                    print(error.localizedDescription)
+        Task {
+            do {
+                let searchResults = try await geocodingService.fetchCoordinates(cityName: cityName)
+                DispatchQueue.main.async {
+                    self.cities = searchResults.results
                 }
+            } catch {
+                print(error)
             }
         }
     }
@@ -27,53 +32,82 @@ class CityViewModel: ObservableObject {
         }
     }
     
+    func deleteCity(at offsets: IndexSet) {
+        savedCities.remove(atOffsets: offsets)
+    }
+    
     func fetchWeatherData(for city: City) {
-        weatherService.fetchWeatherData(latitude: city.latitude, longitude: city.longitude) { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(var weatherData):
-                    // Convertir l'heure actuelle en objet Date
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm"
-                    if let currentTime = dateFormatter.date(from: weatherData.currentWeather.time) {
-                        
-                        // Convertir les strings de temps horaire en objets Date
-                        let hourlyTimes = weatherData.hourly.time.compactMap { dateFormatter.date(from: $0) }
-                        
-                        // Filtrer les indices des heures futures
-                        let filteredIndices = hourlyTimes.enumerated().filter({ $0.element >= currentTime }).map({ $0.offset })
-                        
-                        // Utiliser les indices filtrés pour créer de nouveaux tableaux de données horaires
-                        weatherData.hourly.time = filteredIndices.map { weatherData.hourly.time[$0] }
-                        weatherData.hourly.temperature_2m = filteredIndices.map { weatherData.hourly.temperature_2m[$0] }
-                        weatherData.hourly.weather_code = filteredIndices.map { weatherData.hourly.weather_code[$0] }
-                        
-                    }
-                    
-                    // Mise à jour de selectedWeatherData avec les données filtrées
-                    self?.selectedWeatherData = weatherData
-                case .failure(let error):
-                    print(error)
+        Task {
+            do {
+                let weatherData = try await WeatherService().fetchWeatherData(latitude: city.latitude, longitude: city.longitude)
+                let modifiedWeatherData = await prepareWeatherData(weatherData)
+                DispatchQueue.main.async {
+                    self.selectedWeatherData = modifiedWeatherData
                 }
+            } catch {
+                print(error)
             }
         }
     }
 
+    private func prepareWeatherData(_ weatherData: WeatherData) async -> WeatherData {
+        var modifiedWeatherData = weatherData
+        
+        // Conversion et filtrage des données
+        let inputDateFormatter = DateFormatter()
+        inputDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm"
+
+        let outputDateFormatter = DateFormatter()
+        outputDateFormatter.dateFormat = "HH"
+
+        if let currentTime = inputDateFormatter.date(from: weatherData.currentWeather.time) {
+            let hourlyTimes = weatherData.hourly.time.compactMap { inputDateFormatter.date(from: $0) }
+            let filteredIndices = hourlyTimes.enumerated().filter({ $0.element >= currentTime }).map({ $0.offset })
+
+            modifiedWeatherData.hourly.time = filteredIndices.map { outputDateFormatter.string(from: hourlyTimes[$0]) }
+            
+            modifiedWeatherData.hourly.temperature_2m = filteredIndices.map { weatherData.hourly.temperature_2m[$0] }
+            modifiedWeatherData.hourly.weather_code = filteredIndices.map { weatherData.hourly.weather_code[$0] }
+        }
+        return modifiedWeatherData
+    }
 
     
-    func descriptionForWeatherCode(_ code: Int) -> String {
+    func decriptWeatherCode(_ code: Int) -> (description: String, iconName: String, pColor: Color, sColor: Color?) {
         switch code {
-            case 0: return "Clear Sky"
-            case 1: return "Partly cloudy"
-            case 2: return "Blowing snow"
-            case 3: return "Sandstorm"
-            case 4: return "Fog"
-            case 5: return "Drizzle"
-            case 6: return "Rain"
-            case 7: return "Snow"
-            case 8: return "Shower"
-            case 9: return "Thunderstorm"
-            default: return "Unknown"
+        case 0:
+            return ("Clear Sky", "sun.max.fill", .yellow, nil)
+        case 1...3:
+            return ("Partly Cloudy", "cloud.sun.fill", .white, .yellow)
+        case 4...48:
+            return ("Fog", "cloud.fog.fill", .white, .gray)
+        case 49...55:
+            return ("Drizzle", "cloud.drizzle.fill", .white, .blue)
+        case 56...57:
+            return ("Freezing Drizzle", "cloud.sleet.fill", .white, .blue)
+        case 58...60:
+            return ("Rain", "cloud.heavyrain.fill", .white, .blue)
+        case 61...65:
+            return ("Rain", "cloud.rain.fill", .white, .blue)
+        case 66...67:
+            return ("Freezing Rain", "cloud.sleet.fill", .white, .blue)
+        case 68...75:
+            return ("Snow", "snow", .white, nil)
+        case 76...77:
+            return ("Snow", "wind.snow", .gray, .white)
+        case 78...79:
+            return ("Rain and Snow", "cloud.sleet.fill", .blue, .white)
+        case 80...84:
+            return ("Rain Showers", "cloud.rain.fill", .white, .blue)
+        case 85...86:
+            return ("Snow Showers", "cloud.snow.fill", .white, .white)
+        case 87...94:
+            return ("Extreme Weather", "tornado", .gray, nil)
+        case 95...99:
+            return ("Thunderstorm", "cloud.bolt.rain.fill", .white, .blue)
+        default:
+            return ("Unknown", "questionmark.diamond.fill", .black, .white)
         }
     }
+
 }

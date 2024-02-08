@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CD2D6BA62B6A7F440077FB28 /* HourlyWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2D6BA52B6A7F440077FB28 /* HourlyWeatherView.swift */; };
-		CD2D6BA82B6A7FA90077FB28 /* DailyForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2D6BA72B6A7FA90077FB28 /* DailyForecastView.swift */; };
+		CD2D6BA62B6A7F440077FB28 /* HourlyForecastCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2D6BA52B6A7F440077FB28 /* HourlyForecastCard.swift */; };
+		CD2D6BA82B6A7FA90077FB28 /* DailyForecastItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2D6BA72B6A7FA90077FB28 /* DailyForecastItem.swift */; };
 		CD9316FE2B66BBB5009D1F98 /* GeocodingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9316FD2B66BBB5009D1F98 /* GeocodingService.swift */; };
 		CD9317002B66BCDC009D1F98 /* CityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9316FF2B66BCDC009D1F98 /* CityViewModel.swift */; };
 		CD9317022B66C102009D1F98 /* CitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9317012B66C102009D1F98 /* CitiesView.swift */; };
@@ -43,8 +43,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		CD2D6BA52B6A7F440077FB28 /* HourlyWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherView.swift; sourceTree = "<group>"; };
-		CD2D6BA72B6A7FA90077FB28 /* DailyForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyForecastView.swift; sourceTree = "<group>"; };
+		CD2D6BA52B6A7F440077FB28 /* HourlyForecastCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyForecastCard.swift; sourceTree = "<group>"; };
+		CD2D6BA72B6A7FA90077FB28 /* DailyForecastItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyForecastItem.swift; sourceTree = "<group>"; };
 		CD9316FD2B66BBB5009D1F98 /* GeocodingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodingService.swift; sourceTree = "<group>"; };
 		CD9316FF2B66BCDC009D1F98 /* CityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityViewModel.swift; sourceTree = "<group>"; };
 		CD9317012B66C102009D1F98 /* CitiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesView.swift; sourceTree = "<group>"; };
@@ -179,8 +179,8 @@
 		CDE0C05B2B6697EA00CEE2B6 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				CD2D6BA52B6A7F440077FB28 /* HourlyWeatherView.swift */,
-				CD2D6BA72B6A7FA90077FB28 /* DailyForecastView.swift */,
+				CD2D6BA52B6A7F440077FB28 /* HourlyForecastCard.swift */,
+				CD2D6BA72B6A7FA90077FB28 /* DailyForecastItem.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -334,9 +334,9 @@
 				CD9316FE2B66BBB5009D1F98 /* GeocodingService.swift in Sources */,
 				CD9317002B66BCDC009D1F98 /* CityViewModel.swift in Sources */,
 				CDE0C0602B66A19200CEE2B6 /* City.swift in Sources */,
-				CD2D6BA62B6A7F440077FB28 /* HourlyWeatherView.swift in Sources */,
+				CD2D6BA62B6A7F440077FB28 /* HourlyForecastCard.swift in Sources */,
 				CDE0C02C2B6667BA00CEE2B6 /* WeatherApp.swift in Sources */,
-				CD2D6BA82B6A7FA90077FB28 /* DailyForecastView.swift in Sources */,
+				CD2D6BA82B6A7FA90077FB28 /* DailyForecastItem.swift in Sources */,
 				CD9317022B66C102009D1F98 /* CitiesView.swift in Sources */,
 				CDE0C05A2B668C7400CEE2B6 /* WeatherView.swift in Sources */,
 			);

@@ -1,30 +1,19 @@
+//  GeocodingService.swift
+//
+//  Created by Albi GRAINCA and Batuhan GOKER
+//
+
 import Foundation
 
 class GeocodingService {
-    func fetchCoordinates(cityName: String, completion: @escaping (Result<[City], Error>) -> Void) {
-        let urlString = "https://geocoding-api.open-meteo.com/v1/search?name=\(cityName)&count=10&language=en&format=json"
+    func fetchCoordinates(cityName: String) async throws -> SearchResults {
+        let urlString = "https://geocoding-api.open-meteo.com/v1/search?name=\(cityName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&count=10&language=en&format=json"
         guard let url = URL(string: urlString) else {
-            completion(.failure(NSError(domain: "", code: -1, userInfo: nil)))
-            return
+            throw NSError(domain: "InvalidURL", code: 1, userInfo: nil)
         }
 
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            guard let data = data else {
-                completion(.failure(NSError(domain: "", code: -1, userInfo: nil)))
-                return
-            }
-            
-            do {
-                let searchResults = try JSONDecoder().decode(SearchResults.self, from: data)
-                completion(.success(searchResults.results))
-            } catch {
-                completion(.failure(error))
-            }
-        }.resume()
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let searchResults = try JSONDecoder().decode(SearchResults.self, from: data)
+        return searchResults
     }
 }

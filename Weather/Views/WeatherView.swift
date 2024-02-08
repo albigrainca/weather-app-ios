@@ -1,3 +1,8 @@
+//  WeatherView.swift
+//
+//  Created by Albi GRAINCA and Batuhan GOKER
+//
+
 import SwiftUI
 
 struct WeatherView: View {
@@ -23,7 +28,8 @@ struct WeatherView: View {
                         Text("\(currentWeather.temperature, specifier: "%.1f")°")
                             .font(.system(size: 100))
                             .fontWeight(.bold)
-                        Text("\(viewModel.descriptionForWeatherCode(currentWeather.weathercode))")
+                        let decript = viewModel.decriptWeatherCode(currentWeather.weathercode)
+                        Text("\(decript.description)")
                             .font(.title2)
                         if let dailyWeather = viewModel.selectedWeatherData?.daily,
                            let tempMin = dailyWeather.temperature_2m_min.first,
@@ -55,13 +61,14 @@ struct WeatherView: View {
                     
                     if let hourlyWeather = viewModel.selectedWeatherData?.hourly {
                         ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 10) {
+                            HStack(spacing: 13) {
                                 ForEach(Array(zip(hourlyWeather.time.indices, zip(hourlyWeather.temperature_2m, hourlyWeather.weather_code))).prefix(20), id: \.0) { index, data in
                                     let (temperature, weatherCode) = data
-                                    HourlyWeatherView(dateTimeString: hourlyWeather.time[index], weatherCode: weatherCode, temperature: temperature)
+                                    let decript = viewModel.decriptWeatherCode(weatherCode)
+                                    HourlyForecastCard(decript: decript, dateTimeString: hourlyWeather.time[index], temperature: temperature)
                                 }
                             }
-                            .padding(.horizontal, 5.0)
+                            .padding(.horizontal, 10.0)
                             
                         }
                         .frame(height: 120)
@@ -87,9 +94,10 @@ struct WeatherView: View {
                     
                     if let dailyWeather = viewModel.selectedWeatherData?.daily {
                         VStack {
-                            ForEach(Array(zip(dailyWeather.time.indices, zip(dailyWeather.temperature_2m_min, dailyWeather.temperature_2m_max))), id: \.0) { index, temps in
-                                let (minTemp, maxTemp) = temps
-                                DailyForecastView(dateString: dailyWeather.time[index], minTemp: minTemp, maxTemp: maxTemp)
+                            ForEach(Array(zip(dailyWeather.time.indices, zip(zip(dailyWeather.temperature_2m_min, dailyWeather.temperature_2m_max), dailyWeather.weather_code))), id: \.0) { index, data in
+                                let ((minTemp, maxTemp), weatherCode) = data
+                                let decript = viewModel.decriptWeatherCode(weatherCode)
+                                DailyForecastItem(decript: decript, dateString: dailyWeather.time[index], minTemp: minTemp, maxTemp: maxTemp)
                                 
                                 if index != dailyWeather.time.count - 1 {
                                     Divider().background(Color.white)
@@ -111,7 +119,7 @@ struct WeatherView: View {
         .padding(3)
         .frame(maxWidth: .infinity, alignment: .center)
         .edgesIgnoringSafeArea(.bottom)
-        .background(Color(hue: 0.550, saturation: 0.787, brightness: 0.354))
+        .background(LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.6), Color.white.opacity(0.2)]), startPoint: .top, endPoint: .bottom))
         .preferredColorScheme(.dark)
         .onAppear { viewModel.fetchWeatherData(for: city) }
         .navigationBarTitleDisplayMode(.inline)
@@ -122,6 +130,6 @@ struct WeatherView: View {
 
 
 #Preview {
-    WeatherView(viewModel: CityViewModel(), city: City(id: 1, name: "Sample City", latitude: 0.0, longitude: 0.0))
+    WeatherView(viewModel: CityViewModel(), city: City(id: 1, name: "Sample City", latitude: 5.0, longitude: 0.0))
                .preferredColorScheme(.dark)
 }
