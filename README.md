@@ -52,3 +52,14 @@ L'application est structurée en plusieurs packages que nous détaillons ci-dess
 - **Affichage des données** : Les vues utilisent les données préparées par les ViewModels pour présenter les informations météorologiques à l'utilisateur de manière interactive et engageante.
 
 Nous nous sommes dirigé vers cette architecture afin de favoriser une séparation claire des responsabilités. Pour le design, nous avons pris exemple sur l'application météo d'Apple.
+
+### Images
+
+<div align="center">
+  <img src="https://github.com/albigrainca/Weather/assets/103835746/a285daf4-4cc4-496b-b20e-142612f65675" alt="Image 1" width="300"/>
+  <img src="https://github.com/albigrainca/Weather/assets/103835746/2da1543c-4c31-4126-8055-e85848b712cf" alt="Image 2" width="300"/>
+  <img src="https://github.com/albigrainca/Weather/assets/103835746/185586d3-fab1-4dcf-b20a-5d0b9329644c" alt="Image 3" width="300"/>
+</div>
+
+
+
